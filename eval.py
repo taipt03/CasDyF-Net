@@ -54,7 +54,7 @@ def _eval(model, args):
             pred_clip = torch.clamp(pred, 0, 1)
 
             pred_numpy = pred_clip.squeeze(0).cpu().numpy()
-            label_numpy = label_img.squeeze(0).to(device).numpy()
+            label_numpy = label_img.squeeze(0).cpu().numpy()
 
 
             label_img = (label_img).to(device)
