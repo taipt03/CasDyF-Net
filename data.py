@@ -72,17 +72,24 @@ class DeblurDataset(Dataset):
         return len(self.image_list)
 
     def __getitem__(self, idx):
+        # Load the hazy image
         image = Image.open(os.path.join(self.image_dir, 'hazy', self.image_list[idx]))
-        label = Image.open(os.path.join(self.image_dir, 'clear', self.image_list[idx].split('_')[0]+'.png'))
-
+        
+        # Load the corresponding clear image (use identical file name)
+        label = Image.open(os.path.join(self.image_dir, 'clear', self.image_list[idx]))
+        
+        # Apply transformations if specified
         if self.transform:
             image, label = self.transform(image, label)
         else:
             image = F.to_tensor(image)
             label = F.to_tensor(label)
+        
+        # For testing, also return the file name
         if self.is_test:
             name = self.image_list[idx]
             return image, label, name
+        
         return image, label
 
     @staticmethod
